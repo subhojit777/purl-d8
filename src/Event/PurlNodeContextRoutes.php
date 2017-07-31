@@ -69,7 +69,8 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
         if (!isset($purl_settings['keep_context']) || !$purl_settings['keep_context']) {
           $url = \Drupal\Core\Url::fromRoute($this->routeMatch->getRouteName(), $this->routeMatch->getRawParameters()->all(), [
             'host' => Settings::get('purl_base_domain'),
-            'absolute' => TRUE
+            'absolute' => TRUE,
+            'purl_exit' => TRUE,
           ]);
           try {
             $redirect_response = new TrustedRedirectResponse($url->toString());
