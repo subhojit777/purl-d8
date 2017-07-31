@@ -2,9 +2,8 @@
 
 namespace Drupal\purl\Plugin;
 
-use Drupal\Component\Plugin\Factory\DefaultFactory;
-use Drupal\purl\Plugin\Purl\Provider\ConfigurableInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\purl\Plugin\Purl\Provider\ProviderInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
