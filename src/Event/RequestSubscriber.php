@@ -13,6 +13,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestSubscriber implements EventSubscriberInterface
@@ -83,47 +85,33 @@ class RequestSubscriber implements EventSubscriberInterface
 
     foreach ($matches as $match) {
 
-      if (!$match['method'] instanceof RequestAlteringInterface) {
-        continue;
+      if ($match['method'] instanceof RequestAlteringInterface) {
+        $request = $request->duplicate();
+        $match['method']->alterRequest($request, $match['modifier']);
       }
-
-      $match['method']->alterRequest($request, $match['modifier']);
-      $this->reinitializeRequest($request);
     }
 
     foreach ($matches as $match) {
-      $event = new ModifierMatchedEvent(
+      $modifier_event = new ModifierMatchedEvent(
         $request,
         $match['provider_key'],
         $match['method'],
         $match['modifier'],
         $match['value']
       );
-      $dispatcher->dispatch(PurlEvents::MODIFIER_MATCHED, $event);
-      $this->matchedModifiers->add($event);
+      $dispatcher->dispatch(PurlEvents::MODIFIER_MATCHED, $modifier_event);
+      $this->matchedModifiers->add($modifier_event);
+
+      $request->attributes->set('purl.matched_modifiers', $matches);
+
+      if ($match['method'] instanceof RequestAlteringInterface) {
+        $response = $event->getKernel()
+          ->handle($request, HttpKernelInterface::SUB_REQUEST);
+        if ($response) {
+          $event->setResponse($response);
+        }
+      }
     }
-
-    $request->attributes->set('purl.matched_modifiers', $matches);
   }
 
-  /**
-   * Since the Request object is absent of APIs for modifying parts of the
-   * request, we will need to run its iniitalize method to make it do it
-   * itself. This will be done after a method plugin alters the server
-   * attributes i.e. $request->server->set('REQUEST_URI', '/new/uri')
-   *
-   * I don't have a better solution that doesn't feel hacky.
-   */
-  private function reinitializeRequest(Request $request)
-  {
-    $request->initialize(
-      $request->query->all(),
-      $request->request->all(),
-      $request->attributes->all(),
-      $request->cookies->all(),
-      $request->files->all(),
-      $request->server->all(),
-      $request->getContent()
-    );
-  }
 }
