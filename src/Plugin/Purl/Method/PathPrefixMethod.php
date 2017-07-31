@@ -26,7 +26,7 @@ class PathPrefixMethod extends MethodAbstract implements MethodInterface, Reques
 
     public function alterRequest(Request $request, $identifier)
     {
-        $uri = $request->getRequestUri();
+        $uri = $request->server->get('REQUEST_URI');
         $newPath = substr($uri, strlen($identifier) + 1);
         $request->server->set('REQUEST_URI', $newPath);
     }
