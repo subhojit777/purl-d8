@@ -18,6 +18,6 @@ abstract class MethodAbstract extends PluginBase implements MethodInterface
 
     public function getStages()
     {
-      return $this->pluginDefinition['stages'];
+      return $this->pluginDefinition['stage'];
     }
 }
