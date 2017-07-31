@@ -5,6 +5,14 @@ services:
     calls:
       - [setContainer, [ '@service_container' ]]
 
+  plugin.manager.purl_method_manager:
+    class: Drupal\purl\Plugin\MethodPluginManager
+    parent: default_plugin_manager
+
+  plugin.manager.purl_provider_manager:
+    class: Drupal\purl\Plugin\ProviderManager
+    parent: default_plugin_manager
+
   purl.plugin.provider_manager:
     class: Drupal\purl\Plugin\ProviderManager
     parent: default_plugin_manager
