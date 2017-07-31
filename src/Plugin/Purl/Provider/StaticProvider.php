@@ -22,4 +22,7 @@ class StaticProvider extends ProviderAbstract
             'cinq' => 5,
         );
     }
+  public function getModifierData() {
+    // TODO: Implement getModifierData() method.
+  }
 }
