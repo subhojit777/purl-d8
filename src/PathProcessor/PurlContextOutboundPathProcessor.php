@@ -28,13 +28,13 @@ class PurlContextOutboundPathProcessor implements OutboundPathProcessorInterface
 
     public function processOutbound($path, &$options = array(), Request $request = NULL, BubbleableMetadata $bubbleable_metadata = NULL)
     {
-        if (array_key_exists('purl_context', $options) && $options['purl_context'] == false) {
+      if (count($this->matchedModifiers->getMatched()) && $bubbleable_metadata) {
+        $cacheContexts = $bubbleable_metadata->getCacheContexts();
+        $cacheContexts[] = 'purl';
+        $bubbleable_metadata->setCacheContexts($cacheContexts);
+      }
 
-            if (count($this->matchedModifiers->getMatched()) && $bubbleable_metadata) {
-                $cacheContexts = $bubbleable_metadata->getCacheContexts();
-                $cacheContexts[] = 'purl';
-                $bubbleable_metadata->setCacheContexts($cacheContexts);
-            }
+        if (array_key_exists('purl_context', $options) && $options['purl_context'] == false) {
 
             return $this->contextHelper->processOutbound(
               $this->matchedModifiers->createContexts(Context::EXIT_CONTEXT),
