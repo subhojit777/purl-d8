@@ -5,6 +5,7 @@ namespace Drupal\purl\Routing;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Path\PathValidator;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
@@ -117,10 +118,12 @@ class PurlRouteProvider extends RouteProvider {
     CacheBackendInterface $cache_backend,
     InboundPathProcessorInterface $path_processor,
     CacheTagsInvalidatorInterface $cache_tag_invalidator,
+    $table = 'router',
+    LanguageManagerInterface $language_manager = NULL,
     ContextHelper $contextHelper,
     MatchedModifiers $matchedModifiers
   ) {
-    parent::__construct($connection, $state, $current_path, $cache_backend, $path_processor, $cache_tag_invalidator);
+    parent::__construct($connection, $state, $current_path, $cache_backend, $path_processor, $cache_tag_invalidator, $table, $language_manager);
     $this->contextHelper = $contextHelper;
     $this->matchedModifiers = $matchedModifiers;
   }
