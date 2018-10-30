@@ -1,5 +1,5 @@
 {
-  "name": "freelock/purl-d8",
+  "name": "freelock/purl",
   "type": "drupal-module",
   "description": "Purl module for D8, with patches needed to support group_content",
   "authors": [
