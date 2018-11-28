@@ -16,9 +16,8 @@ class ContextHelper
    */
   protected $storage;
 
-  public function __construct(EntityStorageInterface $storage)
+  public function __construct()
   {
-    $this->storage = $storage;
   }
 
   /**
@@ -33,6 +32,8 @@ class ContextHelper
   {
 
     $result = $path;
+
+
 
     /** @var Context $context */
     foreach ($contexts as $context) {
@@ -105,10 +106,18 @@ class ContextHelper
       return [];
     }
 
-    $providers = $this->storage->loadMultiple(array_keys($map));
+    $providers = $this->getStorage()->loadMultiple(array_keys($map));
 
     return array_map(function (Provider $provider) use ($map) {
       return new Context($map[$provider->id()], $provider->getMethodPlugin());
     }, $providers);
+  }
+
+  protected function getStorage() : EntityStorageInterface {
+    if (empty($this->storage)) {
+      $this->storage = \Drupal::entityTypeManager ()->getStorage('purl_provider');
+    }
+
+    return $this->storage;
   }
 }

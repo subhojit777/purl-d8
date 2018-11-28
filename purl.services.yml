@@ -37,11 +37,6 @@ services:
     tags:
       - { name: event_subscriber }
 
-  purl.provider_storage:
-    class: Drupal\Core\Entity\EntityStorageInterface
-    factory: ['@entity.manager', getStorage]
-    arguments: ['purl_provider']
-
   cache_context.purl:
     class: Drupal\purl\Cache\Context\PurlCacheContext
     tags:
@@ -86,4 +81,3 @@ services:
 
   purl.context_helper:
     class: Drupal\purl\ContextHelper
-    arguments: ['@purl.provider_storage']
