@@ -11,6 +11,9 @@ use Drupal\purl\Entity\Provider;
 
 class ModifiersController extends BaseController
 {
+  /**
+   * @var ModifierIndex
+   */
   protected $modifierIndex;
 
   protected $providerManager;
