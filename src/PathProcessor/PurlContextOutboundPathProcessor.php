@@ -34,23 +34,23 @@ class PurlContextOutboundPathProcessor implements OutboundPathProcessorInterface
         $bubbleable_metadata->setCacheContexts($cacheContexts);
       }
 
-        if (array_key_exists('purl_context', $options) && $options['purl_context'] == false) {
-
-            return $this->contextHelper->processOutbound(
-              $this->matchedModifiers->createContexts(Context::EXIT_CONTEXT),
-              $path,
-              $options,
-              $request,
-              $bubbleable_metadata
-            );
-        }
+      if (array_key_exists('purl_context', $options) && $options['purl_context'] == false) {
 
         return $this->contextHelper->processOutbound(
-          $this->matchedModifiers->createContexts(),
+          $this->matchedModifiers->createContexts(Context::EXIT_CONTEXT),
           $path,
           $options,
           $request,
           $bubbleable_metadata
         );
+      }
+
+      return $this->contextHelper->processOutbound(
+        $this->matchedModifiers->createContexts(),
+        $path,
+        $options,
+        $request,
+        $bubbleable_metadata
+      );
     }
 }
