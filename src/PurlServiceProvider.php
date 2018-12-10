@@ -27,9 +27,12 @@ class PurlServiceProvider extends ServiceProviderBase
     $assemblerDefinition->addArgument(new Reference('purl.context_helper'));
     $assemblerDefinition->addArgument(new Reference('purl.matched_modifiers'));
 
-    $routerDefinition = $container->getDefinition('router.route_provider');
-    $routerDefinition->setClass(PurlRouteProvider::class);
-    $routerDefinition->addArgument(new Reference('purl.context_helper'));
-    $routerDefinition->addArgument(new Reference('purl.matched_modifiers'));
+    if ($routerDefinition = $container->getDefinition('router.route_provider')) {
+      if ($routerDefinition->getClass() == 'Drupal\Core\Routing\RouteProvider') { // don't break tests
+        $routerDefinition->setClass(PurlRouteProvider::class);
+        $routerDefinition->addArgument(new Reference('purl.context_helper'));
+        $routerDefinition->addArgument(new Reference('purl.matched_modifiers'));
+      }
+    }
   }
 }
