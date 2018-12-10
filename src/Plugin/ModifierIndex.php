@@ -32,4 +32,8 @@ class ModifierIndex
 
     return $modifiers;
   }
+
+  public function findModifiers() {
+    return array();
+  }
 }
